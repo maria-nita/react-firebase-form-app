@@ -21,10 +21,15 @@ class App extends Component {
             company: this.state.company,
             email: this.state.email
         }
-        submissionRef.push(entry);
-        this.setState({
-            company: '',
-            email: ''
+        submissionRef.push(entry).then(() => {
+            console.log('Data saved successfully!');
+            this.setState({
+                company: '',
+                email: ''
+            });
+        }).catch((error) => {
+            console.log('The write failed...', error);
+            alert('There has been an error with your submission. Please try again.')
         });
     }
     render() {
