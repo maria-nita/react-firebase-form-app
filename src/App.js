@@ -2,13 +2,22 @@ import React, { Component } from 'react';
 import './App.css';
 
 import firebase from './firebase.js';
-
+import TextInput from './components/TextInput';
 
 class App extends Component {
     state = {
         company: '',
         email: '',
-        showOtherInputField: false
+        showOtherInputField: false,
+        formDetails: [
+            {
+                fieldId: 1,
+                fieldLabel: "Please enter your company name",
+                fieldCode: "company",
+                fieldType: "text",
+                fieldPlaceholder: "Company name"
+            }
+        ]
     }
     handleOtherCheckbox() {
         this.setState({
@@ -16,6 +25,7 @@ class App extends Component {
         });
     }
     handleTextChange(e) {
+        console.log('hello', e.target.name, e.target.value);
         this.setState({
             [e.target.name]: e.target.value
         });
@@ -53,8 +63,9 @@ class App extends Component {
             <div className=''>
                 <section className="add-item">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <label for="company">Please enter your company name</label>
-                        <input id="company" onChange={this.handleTextChange.bind(this)} type="text" name="company" value={this.state.company} placeholder="Company name" />
+                        <TextInput handleTextChange={this.handleTextChange} fieldDetails={this.state.formDetails[0]} fieldValue={this.state.company} />
+                        {/* <label for="company">Please enter your company name</label>
+                        <input id="company" onChange={this.handleTextChange.bind(this)} type="text" name="company" value={this.state.company} placeholder="Company name" /> */}
                         <label for="email">Please enter an email address</label>
                         <input id="email" onChange={this.handleTextChange.bind(this)} type="email" name="email" value={this.state.email} placeholder="Email" />
                         <label for="consentGDPR">I consent to information being stored by Earth Blox</label>
