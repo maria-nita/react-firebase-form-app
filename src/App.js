@@ -7,9 +7,15 @@ import firebase from './firebase.js';
 class App extends Component {
     state = {
         company: '',
-        email: ''
+        email: '',
+        showOtherInputField: false
     }
-    handleChange(e) {
+    handleOtherCheckbox() {
+        this.setState({
+            showOtherInputField: !this.state.showOtherInputField
+        });
+    }
+    handleTextChange(e) {
         this.setState({
             [e.target.name]: e.target.value
         });
@@ -22,17 +28,23 @@ class App extends Component {
             email: this.state.email
         }
         submissionRef.push(entry).then(() => {
-            console.log('Data saved successfully!');
             this.setState({
                 company: '',
                 email: ''
             });
         }).catch((error) => {
-            console.log('The write failed...', error);
             alert('There has been an error with your submission. Please try again.')
         });
     }
     render() {
+        const dataTypes = ["Geotagged photos", "Drone photography", "Ground control points", "Drone video, Drone Lidar", "Drone radar", "Aerial video", "Aerial radar", "Stereo photo", "Aerial Lidar", "Air photo", "Other"];
+        let otherDataField;
+        if (this.state.showOtherInputField) {
+            otherDataField = <div>
+                                <label for="otherDataType">Please specify other data formats you can supply</label>
+                                <input id="otherDataType" name="otherDataType" type="text" />
+                            </div>;
+        }
         return (
         <div className='app'>
             <header>
@@ -42,9 +54,26 @@ class App extends Component {
                 <section className="add-item">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <label for="company">Please enter your company name</label>
-                        <input onChange={this.handleChange.bind(this)} type="text" name="company" value={this.state.company} placeholder="Company name" />
+                        <input id="company" onChange={this.handleTextChange.bind(this)} type="text" name="company" value={this.state.company} placeholder="Company name" />
                         <label for="email">Please enter an email address</label>
-                        <input onChange={this.handleChange.bind(this)} type="email" name="email" value={this.state.email}placeholder="Email" />
+                        <input id="email" onChange={this.handleTextChange.bind(this)} type="email" name="email" value={this.state.email} placeholder="Email" />
+                        <label for="consentGDPR">I consent to information being stored by Earth Blox</label>
+                        <input type="checkbox" id="consentGDPR" name="consentGDPR" />
+                        <fieldset>
+                            <legend>Which types of imagery can you supply</legend>
+                            {dataTypes.map((type) => {
+                                const typeCode = type.split(" ").join("-").toLowerCase();
+                                return (
+                                    <div>
+                                        <input onChange={this.handleOtherCheckbox.bind(this)} type="checkbox" id={typeCode} name="dataTypes" value={type} />
+                                        <label for={typeCode}>{type}</label>
+                                    </div>
+                                )
+                            })}
+                        </fieldset>
+                        {otherDataField}
+                        <label for="certifiedData">I have all the necessary certification to fly and collect data in countries identified</label>
+                        <input type="checkbox" id="certifiedData" name="certifiedData" />
                         <button type="submit">Submit</button>
                     </form>
                 </section>
