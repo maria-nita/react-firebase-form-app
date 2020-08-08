@@ -7,3 +7,8 @@ form {
 input, label, button {
     margin-top: 10px;
 }
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+}
