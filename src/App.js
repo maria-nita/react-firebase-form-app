@@ -9,19 +9,44 @@ class App extends Component {
     state = {
         company: '',
         email: '',
+        country: '',
+        countries: [],
         otherDataType: '',
         typesOfData: [],
+        consentGDPR: false,
+        isCertifiedInCountries: false,
         otherTypes: [],
         showOtherInputField: false,
-        formDetails: [
-            {
-                fieldId: 1,
-                fieldLabel: "Please enter your company name",
-                fieldCode: "company",
-                fieldType: "text",
-                fieldPlaceholder: "Company name"
+        // formDetails: [
+        //     {
+        //         fieldId: 1,
+        //         fieldLabel: "Please enter your company name",
+        //         fieldCode: "company",
+        //         fieldType: "text",
+        //         fieldPlaceholder: "Company name"
+        //     }
+        // ],
+        errorMessages: {
+            company: {
+                message: "You need to fill in the name of the company you represent."
+            },
+            email: {
+                message: "You need to enter a valid email."
+            },
+            gdpr: {
+                message: "We need your consent to store the your data."
+            },
+            imagery: {
+                message: "You need to select at least one type imagery to supply."
+            },
+            countries: {
+                message: "You need to specify at least one country for which you can supply data."
+            },
+            certifiedInCountries: {
+                message: "We need to know that you're certified to fly and collect data in the countries you mentioned."
             }
-        ],
+        },
+        errors: {},
         dataTypes: [
             {
                 id: 1,
@@ -123,30 +148,118 @@ class App extends Component {
             [e.target.name]: e.target.value
         });
     }
-    handleSubmit(e) {
-        e.preventDefault();
-        const submissionRef = firebase.database().ref('submissions');
-        const entry = {
-            company: this.state.company,
-            email: this.state.email,
-            dataTypesSupplied: this.state.typesOfData
-        }
-        submissionRef.push(entry).then(() => {
-            this.setState({
-                company: '',
-                email: ''
-            });
-        }).catch((error) => {
-            alert('There has been an error with your submission. Please try again.')
-        });
-    }
-    handleAddType(e) {
+    handleAddType() {
         const newDataType = this.state.otherDataType;
         this.setState({
             typesOfData: [...this.state.typesOfData, newDataType],
             otherTypes: [...this.state.otherTypes, newDataType],
             otherDataType: ''
         });
+    }
+    handleAddCountry() {
+        const newCountry = this.state.country;
+        this.setState({
+            countries: [...this.state.countries, newCountry],
+            country: ''
+        });
+    }
+    handleConsentCheckbox(value) {
+        if (value === "consentGDPR") {
+            this.setState({
+                consentGDPR: !this.state.consentGDPR
+            });
+        } else if (value === "isCertifiedInCountries") {
+            this.setState({
+                isCertifiedInCountries: !this.state.isCertifiedInCountries
+            });
+        }
+    }
+    handleSubmit(e) {
+        e.preventDefault();
+
+        this.formValidation();
+
+        // const submissionRef = firebase.database().ref('submissions');
+        // const entry = {
+        //     company: this.state.company,
+        //     email: this.state.email,
+        //     dataTypesSupplied: this.state.typesOfData,
+        //     countriesOfOperation: this.state.countries,
+        //     consentGDPR: this.state.consentGDPR,
+        //     isCertifiedInCountries: this.state.isCertifiedInCountries
+        // }
+        // submissionRef.push(entry).then(() => {
+        //     this.setState({
+        //         company: '',
+        //         email: ''
+        //     });
+        // }).catch((error) => {
+        //     alert('There has been an error with your submission. Please try again.')
+        // });
+    }
+    formValidation() {
+        var errorInstances = [];
+        if (this.state.company === "") {
+            errorInstances.push({
+                error: "company",
+                message: this.state.errorMessages.company.message
+            });
+        }
+        if (this.state.email === "") {
+            errorInstances.push({
+                error: "email",
+                message: this.state.errorMessages.email.message
+            });
+        }
+        if (!this.state.consentGDPR) {
+            errorInstances.push({
+                error: "consentGDPR",
+                message: this.state.errorMessages.gdpr.message
+            });
+        }
+        if (this.state.typesOfData.length < 1) {
+            errorInstances.push({
+                error: "dataTypes",
+                message: this.state.errorMessages.imagery.message
+            });
+        }
+        if (this.state.countries.length < 1) {
+            errorInstances.push({
+                error: "countries",
+                message: this.state.errorMessages.imagery.message
+            });
+        }
+        if (!this.state.isCertifiedInCountries) {
+            errorInstances.push({
+                error: "isCertifiedInCountries",
+                message: this.state.errorMessages.certifiedInCountries
+            });
+        }
+        if (errorInstances.length > 0) {
+            this.setState({
+                errors: errorInstances
+            }, () => {
+                console.log('validation test')
+            });
+        } else {
+            const submissionRef = firebase.database().ref('submissions');
+            const entry = {
+                company: this.state.company,
+                email: this.state.email,
+                dataTypesSupplied: this.state.typesOfData,
+                countriesOfOperation: this.state.countries,
+                consentGDPR: this.state.consentGDPR,
+                isCertifiedInCountries: this.state.isCertifiedInCountries
+            }
+            submissionRef.push(entry).then(() => {
+                this.setState({
+                    company: '',
+                    email: ''
+                });
+            }).catch((error) => {
+                alert('There has been an error with your submission. Please try again.')
+            });
+        }
     }
     render() {
         let otherDataField;
@@ -169,6 +282,7 @@ class App extends Component {
                         <div className="field-group">
                             <label for="company">Please enter your company name</label>
                             <input id="company" onChange={this.handleTextChange.bind(this)} type="text" name="company" value={this.state.company} placeholder="Company name" />
+                            <p className="error-message">{}</p>
                         </div>
                         <div className="field-group">
                             <label for="email">Please enter an email address</label>
@@ -176,7 +290,7 @@ class App extends Component {
                         </div>
                         <div className="field-group">
                             <label for="consentGDPR">I consent to information being stored by Earth Blox</label>
-                            <input type="checkbox" id="consentGDPR" name="consentGDPR" />
+                            <input type="checkbox" id="consentGDPR" name="consentGDPR" value="consentGDPR" onChange={this.handleConsentCheckbox.bind(this, "consentGDPR")} checked={this.state.consentGDPR} />
                         </div>
                         <fieldset className="field-group">
                             <legend>Which types of imagery can you supply</legend>
@@ -195,9 +309,20 @@ class App extends Component {
                                 <p>{data}</p>
                             )
                         })}
+                        <div className="field-group
+                        ">
+                            <label for="country">Which geographic countries do you operate from?</label>
+                            <input id="country" onChange={this.handleTextChange.bind(this)} name="country" type="text" value={this.state.country} />
+                            <button type="button" onClick={this.handleAddCountry.bind(this)}>Add this country</button>
+                        </div>
+                        {this.state.countries.map((country) => {
+                            return (
+                                <p>{country}</p>
+                            )
+                        })}
                         <div className="field-group">
-                            <label for="certifiedData">I have all the necessary certification to fly and collect data in countries identified</label>
-                            <input type="checkbox" id="certifiedData" name="certifiedData" />
+                            <label for="isCertifiedInCountries">I have all the necessary certification to fly and collect data in countries identified</label>
+                            <input type="checkbox" id="isCertifiedInCountries" name="isCertifiedInCountries" onChange={this.handleConsentCheckbox.bind(this, "isCertifiedInCountries")} value="isCertifiedInCountries" checked={this.state.isCertifiedInCountries} />
                         </div>
                         <button type="submit">Submit</button>
                     </form>
