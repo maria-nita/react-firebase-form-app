@@ -26,27 +26,33 @@ class App extends Component {
         //         fieldPlaceholder: "Company name"
         //     }
         // ],
-        errorMessages: {
-            company: {
-                message: "You need to fill in the name of the company you represent."
-            },
-            email: {
-                message: "You need to enter a valid email."
-            },
-            gdpr: {
-                message: "We need your consent to store the your data."
-            },
-            imagery: {
-                message: "You need to select at least one type imagery to supply."
-            },
-            countries: {
-                message: "You need to specify at least one country for which you can supply data."
-            },
-            certifiedInCountries: {
-                message: "We need to know that you're certified to fly and collect data in the countries you mentioned."
-            }
-        },
-        errors: {},
+        // errorMessages: {
+        //     company: {
+        //         message: "You need to fill in the name of the company you represent."
+        //     },
+        //     email: {
+        //         message: "You need to enter a valid email."
+        //     },
+        //     gdpr: {
+        //         message: "We need your consent to store the your data."
+        //     },
+        //     imagery: {
+        //         message: "You need to select at least one type imagery to supply."
+        //     },
+        //     countries: {
+        //         message: "You need to specify at least one country for which you can supply data."
+        //     },
+        //     certifiedInCountries: {
+        //         message: "We need to know that you're certified to fly and collect data in the countries you mentioned."
+        //     }
+        // },
+        companyError: false,
+        emailError: false,
+        gdprError: false,
+        imageryError: false,
+        countriesError: false,
+        certifiedInCountriesError: false,
+        // errors: {},
         dataTypes: [
             {
                 id: 1,
@@ -122,6 +128,32 @@ class App extends Component {
             }
         ]
     }
+    errorMessages = [
+        {
+            field: "company",
+            message: "You need to fill in the name of the company you represent."
+        },
+        {
+            field: "email",
+            message: "You need to enter a valid email."
+        },
+        {
+            field: "consentGDPR",
+            message: "We need your consent to store the your data."
+        },
+        {
+            field: "dataTypes",
+            message: "You need to select at least one type imagery to supply."
+        },
+        {
+            field: "countries",
+            message: "You need to specify at least one country for which you can supply data."
+        },
+        {
+            field: "isCertifiedInCOuntries",
+            message: "We need to know that you're certified to fly and collect data in the countries you mentioned."
+        }
+    ]
     handleCheckbox(value, id) {
         if (value === 'Other') {
             this.setState({
@@ -199,43 +231,50 @@ class App extends Component {
     }
     formValidation() {
         var errorInstances = [];
+        var errorCount = 0;
         if (this.state.company === "") {
-            errorInstances.push({
-                error: "company",
-                message: this.state.errorMessages.company.message
+            this.setState({
+                companyError: true
             });
+            errorCount ++;
+            console.log(errorCount);
         }
         if (this.state.email === "") {
-            errorInstances.push({
-                error: "email",
-                message: this.state.errorMessages.email.message
+            this.setState({
+                emailError: true
             });
+            errorCount ++;
+            console.log(errorCount);
         }
         if (!this.state.consentGDPR) {
-            errorInstances.push({
-                error: "consentGDPR",
-                message: this.state.errorMessages.gdpr.message
+            this.setState({
+                gdprError: true
             });
+            errorCount ++;
+            console.log(errorCount);
         }
         if (this.state.typesOfData.length < 1) {
-            errorInstances.push({
-                error: "dataTypes",
-                message: this.state.errorMessages.imagery.message
+            this.setState({
+                imageryError: true
             });
+            errorCount ++;
+            console.log(errorCount);
         }
         if (this.state.countries.length < 1) {
-            errorInstances.push({
-                error: "countries",
-                message: this.state.errorMessages.imagery.message
+            this.setState({
+                countriesError: true
             });
+            errorCount ++;
+            console.log(errorCount);
         }
         if (!this.state.isCertifiedInCountries) {
-            errorInstances.push({
-                error: "isCertifiedInCountries",
-                message: this.state.errorMessages.certifiedInCountries
+            this.setState({
+                isCertifiedInCountriesError: true
             });
+            errorCount ++;
+            console.log(errorCount);
         }
-        if (errorInstances.length > 0) {
+        if (errorCount > 0) {
             this.setState({
                 errors: errorInstances
             }, () => {
@@ -262,13 +301,16 @@ class App extends Component {
         }
     }
     render() {
-        let otherDataField;
+        let otherDataField, companyErrorMessage;
         if (this.state.showOtherInputField) {
             otherDataField = <div className="field-group">
                                 <label for="otherDataType">Please specify other data formats you can supply</label>
                                 <input id="otherDataType" onChange={this.handleTextChange.bind(this)} name="otherDataType" type="text" value={this.state.otherDataType} />
                                 <button type="button" onClick={this.handleAddType.bind(this)}>Add your data type</button>
                             </div>;
+        }
+        if (this.state.companyError) {
+            companyErrorMessage = <p className="error-message">{this.errorMessages.company}</p>;
         }
         return (
         <div className='app'>
@@ -282,7 +324,7 @@ class App extends Component {
                         <div className="field-group">
                             <label for="company">Please enter your company name</label>
                             <input id="company" onChange={this.handleTextChange.bind(this)} type="text" name="company" value={this.state.company} placeholder="Company name" />
-                            <p className="error-message">{}</p>
+                            {companyErrorMessage}
                         </div>
                         <div className="field-group">
                             <label for="email">Please enter an email address</label>
