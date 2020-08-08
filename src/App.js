@@ -10,7 +10,8 @@ class App extends Component {
         company: '',
         email: '',
         otherDataType: '',
-        otherData: [],
+        typesOfData: [],
+        otherTypes: [],
         showOtherInputField: false,
         formDetails: [
             {
@@ -20,14 +21,102 @@ class App extends Component {
                 fieldType: "text",
                 fieldPlaceholder: "Company name"
             }
+        ],
+        dataTypes: [
+            {
+                id: 1,
+                title: "Geotagged photos",
+                code: "geotagged-photos",
+                isChecked: false
+            },
+            {
+                id: 2,
+                title: "Drone photography",
+                code: "drone-photography",
+                isChecked: false
+            },
+            {
+                id: 3,
+                title: "Ground control points",
+                code: "ground-control-points",
+                isChecked: false
+            },
+            {
+                id: 4,
+                title: "Drone video",
+                code: "drone-video",
+                isChecked: false
+            },
+            {
+                id: 5,
+                title: "Drone Lidar",
+                code: "drone-lidar",
+                isChecked: false
+            },
+            {
+                id: 6,
+                title: "Drone radar",
+                code: "drone-radar",
+                isChecked: false
+            },
+            {
+                id: 7,
+                title: "Aerial video",
+                code: "aerial-video",
+                isChecked: false
+            },
+            {
+                id: 8,
+                title: "Aerial radar",
+                code: "aerial-radar",
+                isChecked: false
+            },
+            {
+                id: 9,
+                title: "Stereo photo",
+                code: "stereo-photo",
+                isChecked: false
+            },
+            {
+                id: 10,
+                title: "Aerial Lidar",
+                code: "aerial-lidar",
+                isChecked: false
+            },
+            {
+                id: 11,
+                title: "Air photo",
+                code: "air-photo",
+                isChecked: false
+            },
+            {
+                id: 12,
+                title: "Other",
+                code: "other",
+                isChecked: false
+            }
         ]
     }
-    handleOtherCheckbox(value) {
+    handleCheckbox(value, id) {
         if (value === 'Other') {
             this.setState({
                 showOtherInputField: !this.state.showOtherInputField
             });
+        } else {
+            this.setState({
+                typesOfData: [...this.state.typesOfData, value]
+            });
         }
+        this.setState({
+            dataTypes: this.state.dataTypes.map(
+                dataType => {
+                    if (dataType.id === id) {
+                        dataType.isChecked = !dataType.isChecked
+                    }
+                    return dataType;
+                }
+            )
+        });
     }
     handleTextChange(e) {
         this.setState({
@@ -39,7 +128,8 @@ class App extends Component {
         const submissionRef = firebase.database().ref('submissions');
         const entry = {
             company: this.state.company,
-            email: this.state.email
+            email: this.state.email,
+            dataTypesSupplied: this.state.typesOfData
         }
         submissionRef.push(entry).then(() => {
             this.setState({
@@ -53,12 +143,12 @@ class App extends Component {
     handleAddType(e) {
         const newDataType = this.state.otherDataType;
         this.setState({
-            otherData: [...this.state.otherData, newDataType],
+            typesOfData: [...this.state.typesOfData, newDataType],
+            otherTypes: [...this.state.otherTypes, newDataType],
             otherDataType: ''
         });
     }
     render() {
-        const dataTypes = ["Geotagged photos", "Drone photography", "Ground control points", "Drone video, Drone Lidar", "Drone radar", "Aerial video", "Aerial radar", "Stereo photo", "Aerial Lidar", "Air photo", "Other"];
         let otherDataField;
         if (this.state.showOtherInputField) {
             otherDataField = <div className="field-group">
@@ -90,18 +180,17 @@ class App extends Component {
                         </div>
                         <fieldset className="field-group">
                             <legend>Which types of imagery can you supply</legend>
-                            {dataTypes.map((type) => {
-                                const typeCode = type.split(" ").join("-").toLowerCase();
+                            {this.state.dataTypes.map((type) => {
                                 return (
-                                    <div>
-                                        <input onChange={this.handleOtherCheckbox.bind(this, type)} type="checkbox" id={typeCode} name="dataTypes" value={type} />
-                                        <label for={typeCode}>{type}</label>
+                                    <div key={type.id}>
+                                        <input onChange={this.handleCheckbox.bind(this, type.title, type.id)} type="checkbox" id={type.code} name="dataTypes" value={type.title} checked={type.isChecked} />
+                                        <label for={type.code}>{type.title}</label>
                                     </div>
                                 )
                             })}
                         </fieldset>
                         {otherDataField}
-                        {this.state.otherData.map((data) => {
+                        {this.state.otherTypes.map((data) => {
                             return (
                                 <p>{data}</p>
                             )
