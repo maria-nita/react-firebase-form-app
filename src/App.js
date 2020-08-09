@@ -370,7 +370,7 @@ class App extends Component {
                             </div>
                             {this.state.countries.map((country) => {
                                 return (
-                                    <p className="dynamic-text">{country}<button>x</button></p>
+                                    <p className="dynamic-text">{country}</p>
                                 )
                             })}
                             <div className="field-group-consent">
