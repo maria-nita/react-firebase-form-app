@@ -191,6 +191,8 @@ class App extends Component {
     }
     handleSubmit(e) {
         e.preventDefault();
+        let dataConsent = this.state.consentGDPR;
+        let certificationConsent = this.state.isCertifiedInCountries;
 
         // this.formValidation();
 
@@ -203,28 +205,34 @@ class App extends Component {
             consentGDPR: this.state.consentGDPR,
             isCertifiedInCountries: this.state.isCertifiedInCountries
         }
-        submissionRef.push(entry).then(() => {
-            var resetDataTypes = [];
-            resetDataTypes = this.state.dataTypes.map(dataType => {
-                dataType.isChecked = false;
-                return dataType;
+        if (dataConsent === true && certificationConsent === true) {
+            submissionRef.push(entry).then(() => {
+                var resetDataTypes = [];
+                resetDataTypes = this.state.dataTypes.map(dataType => {
+                    dataType.isChecked = false;
+                    return dataType;
+                });
+                this.setState({
+                    company: '',
+                    email: '',
+                    countries: [],
+                    otherTypes: [],
+                    consentGDPR: false,
+                    isCertifiedInCountries: false,
+                    successMessage: true,
+                    dataTypes: resetDataTypes
+                });
+            }).catch((error) => {
+                this.setState({ 
+                    successMessage: false
+                });
             });
+        } else {
             this.setState({
-                company: '',
-                email: '',
-                countries: [],
-                otherTypes: [],
-                consentGDPR: false,
-                isCertifiedInCountries: false,
-                successMessage: true,
-                dataTypes: resetDataTypes
-            });
-        }).catch((error) => {
-            this.setState({ 
-                successMessage: false
-            });
-            console.log('There has been an error with your submission. Please try again.')
-        });
+                gdprError: true,
+                certifiedInCountriesError: true
+            })
+        }
     }
     // formValidation() {
     //     var errorInstances = [];
@@ -298,8 +306,7 @@ class App extends Component {
     //     }
     // }
     render() {
-        let otherDataField, successMessage;
-        // let companyErrorMessage;
+        let otherDataField, successMessage, gdprErrorMessage, certificationErrorMessage;
         if (this.state.showOtherInputField) {
             otherDataField = <div className="field-group">
                                 <label htmlFor="otherDataType">Please specify other data formats you can supply</label>
@@ -316,9 +323,16 @@ class App extends Component {
                                 <p>There has been an error with your submission. Please try again.</p>
                             </div>;
         }
-        // if (this.state.companyError) {
-        //     companyErrorMessage = <p className="error-message">{this.errorMessages.company}</p>;
-        // }
+        if (this.state.gdprError === true) {
+            gdprErrorMessage = <div className="error-message">
+                                <p>We need your consent to store your data.</p>
+                            </div>;
+        }
+        if (this.state.certifiedInCountriesError === true) {
+            certificationErrorMessage = <div className="error-message">
+                                        <p>We need to confirm that you're certified to fly and collect data in the countries you mentioned.</p>
+                                    </div>;
+        }
         return (
         <div className='App'>
             <header>
@@ -345,6 +359,7 @@ class App extends Component {
                                 <label htmlFor="consentGDPR">I consent to information being stored by Earth Blox</label>
                                 <input type="checkbox" id="consentGDPR" name="consentGDPR" value="consentGDPR" onChange={this.handleConsentCheckbox.bind(this, "consentGDPR")} checked={this.state.consentGDPR} />
                             </div>
+                            {gdprErrorMessage}
                             <fieldset className="field-group">
                                 <legend className="field-label">Which types of imagery can you supply</legend>
                                 {this.state.dataTypes.map((type) => {
@@ -377,6 +392,7 @@ class App extends Component {
                                 <label htmlFor="isCertifiedInCountries">I have all the necessary certification to fly and collect data in countries identified</label>
                                 <input type="checkbox" id="isCertifiedInCountries" name="isCertifiedInCountries" onChange={this.handleConsentCheckbox.bind(this, "isCertifiedInCountries")} value="isCertifiedInCountries" checked={this.state.isCertifiedInCountries} />
                             </div>
+                            {certificationErrorMessage}
                             <button className="form-submit" type="submit">Submit</button>
                         </form>
                         {successMessage}
