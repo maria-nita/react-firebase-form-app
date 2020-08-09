@@ -106,32 +106,6 @@ class App extends Component {
             }
         ]
     }
-    errorMessages = [
-        {
-            field: "company",
-            message: "You need to fill in the name of the company you represent."
-        },
-        {
-            field: "email",
-            message: "You need to enter a valid email."
-        },
-        {
-            field: "consentGDPR",
-            message: "We need your consent to store the your data."
-        },
-        {
-            field: "dataTypes",
-            message: "You need to select at least one type imagery to supply."
-        },
-        {
-            field: "countries",
-            message: "You need to specify at least one country for which you can supply data."
-        },
-        {
-            field: "isCertifiedInCOuntries",
-            message: "We need to know that you're certified to fly and collect data in the countries you mentioned."
-        }
-    ]
     handleCheckbox(value, id) {
         if (value === 'Other') {
             this.setState({
@@ -225,7 +199,8 @@ class App extends Component {
         } else {
             this.setState({
                 gdprError: true,
-                certifiedInCountriesError: true
+                certifiedInCountriesError: true,
+                successMessage: null
             })
         }
     }
