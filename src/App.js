@@ -310,59 +310,63 @@ class App extends Component {
             <header>
                 <Header />
             </header>
-            <h1>EarthBlox Challenge</h1>
-            <div className=''>
-                <section className="add-item">
-                    <form onSubmit={this.handleSubmit.bind(this)}>
-                        {/* <InputField handleTextChange={this.handleTextChange} fieldDetails={this.state.formDetails[0]} fieldValue={this.state.company} /> */}
-                        <div className="field-group">
-                            <label for="company">Please enter your company name</label>
-                            <input id="company" onChange={this.handleTextChange.bind(this)} type="text" name="company" value={this.state.company} placeholder="Company name" />
-                            {/* {companyErrorMessage} */}
-                        </div>
-                        <div className="field-group">
-                            <label for="email">Please enter an email address</label>
-                            <input id="email" onChange={this.handleTextChange.bind(this)} type="email" name="email" value={this.state.email} placeholder="Email" />
-                        </div>
-                        <div className="field-group">
-                            <label for="consentGDPR">I consent to information being stored by Earth Blox</label>
-                            <input type="checkbox" id="consentGDPR" name="consentGDPR" value="consentGDPR" onChange={this.handleConsentCheckbox.bind(this, "consentGDPR")} checked={this.state.consentGDPR} />
-                        </div>
-                        <fieldset className="field-group">
-                            <legend>Which types of imagery can you supply</legend>
-                            {this.state.dataTypes.map((type) => {
+            <div className="image-section">
+                <div className="container">
+                    <div className="title-wrapper">
+                        <h1>Earth Data Submission</h1>
+                    </div>
+                    <div className="form-wrapper">
+                        <form onSubmit={this.handleSubmit.bind(this)}>
+                            {/* <InputField handleTextChange={this.handleTextChange} fieldDetails={this.state.formDetails[0]} fieldValue={this.state.company} /> */}
+                            <div className="field-group">
+                                <label className="field-label" for="company">Please enter your company name</label>
+                                <input id="company" onChange={this.handleTextChange.bind(this)} type="text" name="company" value={this.state.company} placeholder="Company name" />
+                                {/* {companyErrorMessage} */}
+                            </div>
+                            <div className="field-group">
+                                <label className="field-label" for="email">Please enter an email address</label>
+                                <input id="email" onChange={this.handleTextChange.bind(this)} type="email" name="email" value={this.state.email} placeholder="Email" />
+                            </div>
+                            <div className="field-group-consent">
+                                <label for="consentGDPR">I consent to information being stored by Earth Blox</label>
+                                <input type="checkbox" id="consentGDPR" name="consentGDPR" value="consentGDPR" onChange={this.handleConsentCheckbox.bind(this, "consentGDPR")} checked={this.state.consentGDPR} />
+                            </div>
+                            <fieldset className="field-group">
+                                <legend className="field-label">Which types of imagery can you supply</legend>
+                                {this.state.dataTypes.map((type) => {
+                                    return (
+                                        <div key={type.id}>
+                                            <input onChange={this.handleCheckbox.bind(this, type.title, type.id)} type="checkbox" id={type.code} name="dataTypes" value={type.title} checked={type.isChecked} />
+                                            <label className="checkbox-label" for={type.code}>{type.title}</label>
+                                        </div>
+                                    )
+                                })}
+                            </fieldset>
+                            {otherDataField}
+                            {this.state.otherTypes.map((data) => {
                                 return (
-                                    <div key={type.id}>
-                                        <input onChange={this.handleCheckbox.bind(this, type.title, type.id)} type="checkbox" id={type.code} name="dataTypes" value={type.title} checked={type.isChecked} />
-                                        <label for={type.code}>{type.title}</label>
-                                    </div>
+                                    <p>{data}</p>
                                 )
                             })}
-                        </fieldset>
-                        {otherDataField}
-                        {this.state.otherTypes.map((data) => {
-                            return (
-                                <p>{data}</p>
-                            )
-                        })}
-                        <div className="field-group
-                        ">
-                            <label for="country">Which geographic countries do you operate from?</label>
-                            <input id="country" onChange={this.handleTextChange.bind(this)} name="country" type="text" value={this.state.country} />
-                            <button type="button" onClick={this.handleAddCountry.bind(this)}>Add this country</button>
-                        </div>
-                        {this.state.countries.map((country) => {
-                            return (
-                                <p>{country}</p>
-                            )
-                        })}
-                        <div className="field-group">
-                            <label for="isCertifiedInCountries">I have all the necessary certification to fly and collect data in countries identified</label>
-                            <input type="checkbox" id="isCertifiedInCountries" name="isCertifiedInCountries" onChange={this.handleConsentCheckbox.bind(this, "isCertifiedInCountries")} value="isCertifiedInCountries" checked={this.state.isCertifiedInCountries} />
-                        </div>
-                        <button type="submit">Submit</button>
-                    </form>
-                </section>
+                            <div className="field-group
+                            ">
+                                <label className="field-label" for="country">Which geographic countries do you operate from?</label>
+                                <input id="country" onChange={this.handleTextChange.bind(this)} name="country" type="text" value={this.state.country} />
+                                <button type="button" onClick={this.handleAddCountry.bind(this)}>Add this country</button>
+                            </div>
+                            {this.state.countries.map((country) => {
+                                return (
+                                    <p>{country}</p>
+                                )
+                            })}
+                            <div className="field-group-consent">
+                                <label for="isCertifiedInCountries">I have all the necessary certification to fly and collect data in countries identified</label>
+                                <input type="checkbox" id="isCertifiedInCountries" name="isCertifiedInCountries" onChange={this.handleConsentCheckbox.bind(this, "isCertifiedInCountries")} value="isCertifiedInCountries" checked={this.state.isCertifiedInCountries} />
+                            </div>
+                            <button className="form-submit" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
         );

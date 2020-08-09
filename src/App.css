@@ -1,21 +1,68 @@
 body {
     font-family: 'Montserrat', Arial, sans-serif;
     background-color: #231F20;
+}
+h1 {
     color: #fff;
+    font-size: 33px;
+    line-height: normal;
+    font-weight: 800;
+    text-align: center;
 }
 
-.app {
+.image-section {
+    background-image: url("./aerial-view-2.jpg");
+    background-size: cover;
+}
+
+.container {
     max-width: 1200px;
-    padding: 0 15px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0 40px 0;
+}
+
+.title-wrapper{
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 90%;
+}
+
+.form-wrapper {
+    width: 90%;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+    .title-wrapper{
+        width: 60%;
+    }
+    .form-wrapper {
+        width: 55%;
+    }
 }
 
 form {
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 30px;
+    font-size: 14px; 
+    justify-content: space-between;
 }
 
-input, label, button {
+input, label, button, legend {
+    margin-top: 10px;
+}
+
+form input, form button {
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.field-group, .field-group-consent {
     margin-top: 10px;
 }
 
@@ -24,6 +71,57 @@ input, label, button {
     flex-direction: column;
 }
 
-.error-message {
-    color: red;
+.field-group .field-label {
+    font-weight: 600;
 }
+
+.field-group .checkbox-label {
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.field-group input {
+    padding: 5px;
+}
+
+form button {
+    padding: 5px;
+    background-color: #231F20;
+    color: #fff;
+    border: 1px solid #231F20;
+    cursor: pointer;
+    transition: all .4s ease-in-out;
+}
+
+form button:hover, form button:focus {
+    transition: all .4s ease-in-out;
+    background-color: #fff;
+    color: #231F20;
+}
+
+.form-submit {
+    background-color: #9FC851;
+    border: 1px solid #9FC851;
+    transition: all .4s ease-in-out;
+    color: #231f20;
+}
+
+.form-submit:hover, .form-submit:focus {
+    background-color: #7CBB57;
+    border: 1px solid #7CBB57;
+    transition: all .4s ease-in-out;
+}
+
+.field-group input::placeholder {
+    font-style: italic;
+    color: #ccc;
+}
+
+.field-group-consent {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* .error-message {
+    color: red;
+} */
