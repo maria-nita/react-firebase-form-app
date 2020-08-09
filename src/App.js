@@ -29,13 +29,8 @@ class App extends Component {
         //         fieldPlaceholder: "Company name"
         //     }
         // ],
-        companyError: false,
-        emailError: false,
         gdprError: false,
-        imageryError: false,
-        countriesError: false,
         certifiedInCountriesError: false,
-        // errors: {},
         dataTypes: [
             {
                 id: 1,
@@ -194,8 +189,6 @@ class App extends Component {
         let dataConsent = this.state.consentGDPR;
         let certificationConsent = this.state.isCertifiedInCountries;
 
-        // this.formValidation();
-
         const submissionRef = firebase.database().ref('submissions');
         const entry = {
             company: this.state.company,
@@ -219,6 +212,8 @@ class App extends Component {
                     otherTypes: [],
                     consentGDPR: false,
                     isCertifiedInCountries: false,
+                    gdprError: false,
+                    certifiedInCountriesError: false,
                     successMessage: true,
                     dataTypes: resetDataTypes
                 });
@@ -234,77 +229,6 @@ class App extends Component {
             })
         }
     }
-    // formValidation() {
-    //     var errorInstances = [];
-    //     var errorCount = 0;
-    //     if (this.state.company === "") {
-    //         this.setState({
-    //             companyError: true
-    //         });
-    //         errorCount ++;
-    //         console.log(errorCount);
-    //     }
-    //     if (this.state.email === "") {
-    //         this.setState({
-    //             emailError: true
-    //         });
-    //         errorCount ++;
-    //         console.log(errorCount);
-    //     }
-    //     if (!this.state.consentGDPR) {
-    //         this.setState({
-    //             gdprError: true
-    //         });
-    //         errorCount ++;
-    //         console.log(errorCount);
-    //     }
-    //     if (this.state.typesOfData.length < 1) {
-    //         this.setState({
-    //             imageryError: true
-    //         });
-    //         errorCount ++;
-    //         console.log(errorCount);
-    //     }
-    //     if (this.state.countries.length < 1) {
-    //         this.setState({
-    //             countriesError: true
-    //         });
-    //         errorCount ++;
-    //         console.log(errorCount);
-    //     }
-    //     if (!this.state.isCertifiedInCountries) {
-    //         this.setState({
-    //             isCertifiedInCountriesError: true
-    //         });
-    //         errorCount ++;
-    //         console.log(errorCount);
-    //     }
-    //     if (errorCount > 0) {
-    //         this.setState({
-    //             errors: errorInstances
-    //         }, () => {
-    //             console.log('validation test')
-    //         });
-    //     } else {
-    //         const submissionRef = firebase.database().ref('submissions');
-    //         const entry = {
-    //             company: this.state.company,
-    //             email: this.state.email,
-    //             dataTypesSupplied: this.state.typesOfData,
-    //             countriesOfOperation: this.state.countries,
-    //             consentGDPR: this.state.consentGDPR,
-    //             isCertifiedInCountries: this.state.isCertifiedInCountries
-    //         }
-    //         submissionRef.push(entry).then(() => {
-    //             this.setState({
-    //                 company: '',
-    //                 email: ''
-    //             });
-    //         }).catch((error) => {
-    //             alert('There has been an error with your submission. Please try again.')
-    //         });
-    //     }
-    // }
     render() {
         let otherDataField, successMessage, gdprErrorMessage, certificationErrorMessage;
         if (this.state.showOtherInputField) {
