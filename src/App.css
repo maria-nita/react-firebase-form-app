@@ -127,6 +127,11 @@ form button:hover, form button:focus {
     text-align: center;
 }
 
+.dynamic-text {
+    margin-top: 10px;
+    font-style: italic;
+}
+
 /* .error-message {
     color: red;
 } */

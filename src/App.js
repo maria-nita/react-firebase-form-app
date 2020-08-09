@@ -19,7 +19,7 @@ class App extends Component {
         isCertifiedInCountries: false,
         otherTypes: [],
         showOtherInputField: false,
-        successMessage: false,
+        successMessage: null,
         // formDetails: [
         //     {
         //         fieldId: 1,
@@ -220,7 +220,10 @@ class App extends Component {
                 dataTypes: resetDataTypes
             });
         }).catch((error) => {
-            alert('There has been an error with your submission. Please try again.')
+            this.setState({ 
+                successMessage: false
+            });
+            console.log('There has been an error with your submission. Please try again.')
         });
     }
     // formValidation() {
@@ -304,16 +307,20 @@ class App extends Component {
                                 <button type="button" onClick={this.handleAddType.bind(this)}>Add your data type</button>
                             </div>;
         }
-        if (this.state.successMessage) {
+        if (this.state.successMessage === true) {
             successMessage = <div className="success-message">
                                 <p> Thank you, your submission has been registered.</p>
-                            </div>
+                            </div>;
+        } else if (this.state.successMessage === false) {
+            successMessage = <div className="success-message">
+                                <p>There has been an error with your submission. Please try again.</p>
+                            </div>;
         }
         // if (this.state.companyError) {
         //     companyErrorMessage = <p className="error-message">{this.errorMessages.company}</p>;
         // }
         return (
-        <div className='app'>
+        <div className='App'>
             <header>
                 <Header />
             </header>
@@ -363,7 +370,7 @@ class App extends Component {
                             </div>
                             {this.state.countries.map((country) => {
                                 return (
-                                    <p className="dynamic-text">{country}</p>
+                                    <p className="dynamic-text">{country}<button>x</button></p>
                                 )
                             })}
                             <div className="field-group-consent">
