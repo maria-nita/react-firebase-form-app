@@ -4,6 +4,7 @@ import './App.css';
 
 import firebase from './firebase.js';
 // import InputField from './components/InputField';
+import Header from './components/Header/Header';
 
 class App extends Component {
     state = {
@@ -17,6 +18,7 @@ class App extends Component {
         isCertifiedInCountries: false,
         otherTypes: [],
         showOtherInputField: false,
+        successMessage: false,
         // formDetails: [
         //     {
         //         fieldId: 1,
@@ -201,9 +203,20 @@ class App extends Component {
             isCertifiedInCountries: this.state.isCertifiedInCountries
         }
         submissionRef.push(entry).then(() => {
+            var resetDataTypes = [];
+            resetDataTypes = this.state.dataTypes.map(dataType => {
+                dataType.isChecked = false;
+                return dataType;
+            });
             this.setState({
                 company: '',
-                email: ''
+                email: '',
+                countries: [],
+                otherTypes: [],
+                consentGDPR: false,
+                isCertifiedInCountries: false,
+                successMessage: true,
+                dataTypes: resetDataTypes
             });
         }).catch((error) => {
             alert('There has been an error with your submission. Please try again.')
@@ -295,7 +308,7 @@ class App extends Component {
         return (
         <div className='app'>
             <header>
-                
+                <Header />
             </header>
             <h1>EarthBlox Challenge</h1>
             <div className=''>
