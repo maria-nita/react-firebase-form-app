@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from './../../earthblox-logo.png'
+import logo from './../../assets/earthblox-logo.png'
 
 import './Header.css'
 
