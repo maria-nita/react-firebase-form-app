@@ -5,6 +5,7 @@ import './App.css';
 import firebase from './firebase.js';
 // import InputField from './components/InputField';
 import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 
 class App extends Component {
     state = {
@@ -368,6 +369,9 @@ class App extends Component {
                     </div>
                 </div>
             </div>
+            <footer>
+                <Footer />
+            </footer>
         </div>
         );
     }
