@@ -295,13 +295,19 @@ class App extends Component {
     //     }
     // }
     render() {
-        let otherDataField, companyErrorMessage;
+        let otherDataField, successMessage;
+        // let companyErrorMessage;
         if (this.state.showOtherInputField) {
             otherDataField = <div className="field-group">
-                                <label for="otherDataType">Please specify other data formats you can supply</label>
+                                <label htmlFor="otherDataType">Please specify other data formats you can supply</label>
                                 <input id="otherDataType" onChange={this.handleTextChange.bind(this)} name="otherDataType" type="text" value={this.state.otherDataType} />
                                 <button type="button" onClick={this.handleAddType.bind(this)}>Add your data type</button>
                             </div>;
+        }
+        if (this.state.successMessage) {
+            successMessage = <div className="success-message">
+                                <p> Thank you, your submission has been registered.</p>
+                            </div>
         }
         // if (this.state.companyError) {
         //     companyErrorMessage = <p className="error-message">{this.errorMessages.company}</p>;
@@ -320,16 +326,16 @@ class App extends Component {
                         <form onSubmit={this.handleSubmit.bind(this)}>
                             {/* <InputField handleTextChange={this.handleTextChange} fieldDetails={this.state.formDetails[0]} fieldValue={this.state.company} /> */}
                             <div className="field-group">
-                                <label className="field-label" for="company">Please enter your company name</label>
+                                <label className="field-label" htmlFor="company">Please enter your company name</label>
                                 <input id="company" onChange={this.handleTextChange.bind(this)} type="text" name="company" value={this.state.company} placeholder="Company name" />
                                 {/* {companyErrorMessage} */}
                             </div>
                             <div className="field-group">
-                                <label className="field-label" for="email">Please enter an email address</label>
+                                <label className="field-label" htmlFor="email">Please enter an email address</label>
                                 <input id="email" onChange={this.handleTextChange.bind(this)} type="email" name="email" value={this.state.email} placeholder="Email" />
                             </div>
                             <div className="field-group-consent">
-                                <label for="consentGDPR">I consent to information being stored by Earth Blox</label>
+                                <label htmlFor="consentGDPR">I consent to information being stored by Earth Blox</label>
                                 <input type="checkbox" id="consentGDPR" name="consentGDPR" value="consentGDPR" onChange={this.handleConsentCheckbox.bind(this, "consentGDPR")} checked={this.state.consentGDPR} />
                             </div>
                             <fieldset className="field-group">
@@ -338,7 +344,7 @@ class App extends Component {
                                     return (
                                         <div key={type.id}>
                                             <input onChange={this.handleCheckbox.bind(this, type.title, type.id)} type="checkbox" id={type.code} name="dataTypes" value={type.title} checked={type.isChecked} />
-                                            <label className="checkbox-label" for={type.code}>{type.title}</label>
+                                            <label className="checkbox-label" htmlFor={type.code}>{type.title}</label>
                                         </div>
                                     )
                                 })}
@@ -346,26 +352,27 @@ class App extends Component {
                             {otherDataField}
                             {this.state.otherTypes.map((data) => {
                                 return (
-                                    <p>{data}</p>
+                                    <p className="dynamic-text">{data}</p>
                                 )
                             })}
                             <div className="field-group
                             ">
-                                <label className="field-label" for="country">Which geographic countries do you operate from?</label>
+                                <label className="field-label" htmlFor="country">Which geographic countries do you operate from?</label>
                                 <input id="country" onChange={this.handleTextChange.bind(this)} name="country" type="text" value={this.state.country} />
                                 <button type="button" onClick={this.handleAddCountry.bind(this)}>Add this country</button>
                             </div>
                             {this.state.countries.map((country) => {
                                 return (
-                                    <p>{country}</p>
+                                    <p className="dynamic-text">{country}</p>
                                 )
                             })}
                             <div className="field-group-consent">
-                                <label for="isCertifiedInCountries">I have all the necessary certification to fly and collect data in countries identified</label>
+                                <label htmlFor="isCertifiedInCountries">I have all the necessary certification to fly and collect data in countries identified</label>
                                 <input type="checkbox" id="isCertifiedInCountries" name="isCertifiedInCountries" onChange={this.handleConsentCheckbox.bind(this, "isCertifiedInCountries")} value="isCertifiedInCountries" checked={this.state.isCertifiedInCountries} />
                             </div>
                             <button className="form-submit" type="submit">Submit</button>
                         </form>
+                        {successMessage}
                     </div>
                 </div>
             </div>

@@ -122,6 +122,11 @@ form button:hover, form button:focus {
     justify-content: space-between;
 }
 
+.success-message {
+    padding: 30px;
+    text-align: center;
+}
+
 /* .error-message {
     color: red;
 } */
