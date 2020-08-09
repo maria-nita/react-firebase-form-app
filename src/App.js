@@ -26,26 +26,6 @@ class App extends Component {
         //         fieldPlaceholder: "Company name"
         //     }
         // ],
-        // errorMessages: {
-        //     company: {
-        //         message: "You need to fill in the name of the company you represent."
-        //     },
-        //     email: {
-        //         message: "You need to enter a valid email."
-        //     },
-        //     gdpr: {
-        //         message: "We need your consent to store the your data."
-        //     },
-        //     imagery: {
-        //         message: "You need to select at least one type imagery to supply."
-        //     },
-        //     countries: {
-        //         message: "You need to specify at least one country for which you can supply data."
-        //     },
-        //     certifiedInCountries: {
-        //         message: "We need to know that you're certified to fly and collect data in the countries you mentioned."
-        //     }
-        // },
         companyError: false,
         emailError: false,
         gdprError: false,
@@ -209,97 +189,97 @@ class App extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
-        this.formValidation();
+        // this.formValidation();
 
-        // const submissionRef = firebase.database().ref('submissions');
-        // const entry = {
-        //     company: this.state.company,
-        //     email: this.state.email,
-        //     dataTypesSupplied: this.state.typesOfData,
-        //     countriesOfOperation: this.state.countries,
-        //     consentGDPR: this.state.consentGDPR,
-        //     isCertifiedInCountries: this.state.isCertifiedInCountries
-        // }
-        // submissionRef.push(entry).then(() => {
-        //     this.setState({
-        //         company: '',
-        //         email: ''
-        //     });
-        // }).catch((error) => {
-        //     alert('There has been an error with your submission. Please try again.')
-        // });
+        const submissionRef = firebase.database().ref('submissions');
+        const entry = {
+            company: this.state.company,
+            email: this.state.email,
+            dataTypesSupplied: this.state.typesOfData,
+            countriesOfOperation: this.state.countries,
+            consentGDPR: this.state.consentGDPR,
+            isCertifiedInCountries: this.state.isCertifiedInCountries
+        }
+        submissionRef.push(entry).then(() => {
+            this.setState({
+                company: '',
+                email: ''
+            });
+        }).catch((error) => {
+            alert('There has been an error with your submission. Please try again.')
+        });
     }
-    formValidation() {
-        var errorInstances = [];
-        var errorCount = 0;
-        if (this.state.company === "") {
-            this.setState({
-                companyError: true
-            });
-            errorCount ++;
-            console.log(errorCount);
-        }
-        if (this.state.email === "") {
-            this.setState({
-                emailError: true
-            });
-            errorCount ++;
-            console.log(errorCount);
-        }
-        if (!this.state.consentGDPR) {
-            this.setState({
-                gdprError: true
-            });
-            errorCount ++;
-            console.log(errorCount);
-        }
-        if (this.state.typesOfData.length < 1) {
-            this.setState({
-                imageryError: true
-            });
-            errorCount ++;
-            console.log(errorCount);
-        }
-        if (this.state.countries.length < 1) {
-            this.setState({
-                countriesError: true
-            });
-            errorCount ++;
-            console.log(errorCount);
-        }
-        if (!this.state.isCertifiedInCountries) {
-            this.setState({
-                isCertifiedInCountriesError: true
-            });
-            errorCount ++;
-            console.log(errorCount);
-        }
-        if (errorCount > 0) {
-            this.setState({
-                errors: errorInstances
-            }, () => {
-                console.log('validation test')
-            });
-        } else {
-            const submissionRef = firebase.database().ref('submissions');
-            const entry = {
-                company: this.state.company,
-                email: this.state.email,
-                dataTypesSupplied: this.state.typesOfData,
-                countriesOfOperation: this.state.countries,
-                consentGDPR: this.state.consentGDPR,
-                isCertifiedInCountries: this.state.isCertifiedInCountries
-            }
-            submissionRef.push(entry).then(() => {
-                this.setState({
-                    company: '',
-                    email: ''
-                });
-            }).catch((error) => {
-                alert('There has been an error with your submission. Please try again.')
-            });
-        }
-    }
+    // formValidation() {
+    //     var errorInstances = [];
+    //     var errorCount = 0;
+    //     if (this.state.company === "") {
+    //         this.setState({
+    //             companyError: true
+    //         });
+    //         errorCount ++;
+    //         console.log(errorCount);
+    //     }
+    //     if (this.state.email === "") {
+    //         this.setState({
+    //             emailError: true
+    //         });
+    //         errorCount ++;
+    //         console.log(errorCount);
+    //     }
+    //     if (!this.state.consentGDPR) {
+    //         this.setState({
+    //             gdprError: true
+    //         });
+    //         errorCount ++;
+    //         console.log(errorCount);
+    //     }
+    //     if (this.state.typesOfData.length < 1) {
+    //         this.setState({
+    //             imageryError: true
+    //         });
+    //         errorCount ++;
+    //         console.log(errorCount);
+    //     }
+    //     if (this.state.countries.length < 1) {
+    //         this.setState({
+    //             countriesError: true
+    //         });
+    //         errorCount ++;
+    //         console.log(errorCount);
+    //     }
+    //     if (!this.state.isCertifiedInCountries) {
+    //         this.setState({
+    //             isCertifiedInCountriesError: true
+    //         });
+    //         errorCount ++;
+    //         console.log(errorCount);
+    //     }
+    //     if (errorCount > 0) {
+    //         this.setState({
+    //             errors: errorInstances
+    //         }, () => {
+    //             console.log('validation test')
+    //         });
+    //     } else {
+    //         const submissionRef = firebase.database().ref('submissions');
+    //         const entry = {
+    //             company: this.state.company,
+    //             email: this.state.email,
+    //             dataTypesSupplied: this.state.typesOfData,
+    //             countriesOfOperation: this.state.countries,
+    //             consentGDPR: this.state.consentGDPR,
+    //             isCertifiedInCountries: this.state.isCertifiedInCountries
+    //         }
+    //         submissionRef.push(entry).then(() => {
+    //             this.setState({
+    //                 company: '',
+    //                 email: ''
+    //             });
+    //         }).catch((error) => {
+    //             alert('There has been an error with your submission. Please try again.')
+    //         });
+    //     }
+    // }
     render() {
         let otherDataField, companyErrorMessage;
         if (this.state.showOtherInputField) {
@@ -309,14 +289,15 @@ class App extends Component {
                                 <button type="button" onClick={this.handleAddType.bind(this)}>Add your data type</button>
                             </div>;
         }
-        if (this.state.companyError) {
-            companyErrorMessage = <p className="error-message">{this.errorMessages.company}</p>;
-        }
+        // if (this.state.companyError) {
+        //     companyErrorMessage = <p className="error-message">{this.errorMessages.company}</p>;
+        // }
         return (
         <div className='app'>
             <header>
-                <h1>EarthBlox Challenge</h1>
+                
             </header>
+            <h1>EarthBlox Challenge</h1>
             <div className=''>
                 <section className="add-item">
                     <form onSubmit={this.handleSubmit.bind(this)}>
@@ -324,7 +305,7 @@ class App extends Component {
                         <div className="field-group">
                             <label for="company">Please enter your company name</label>
                             <input id="company" onChange={this.handleTextChange.bind(this)} type="text" name="company" value={this.state.company} placeholder="Company name" />
-                            {companyErrorMessage}
+                            {/* {companyErrorMessage} */}
                         </div>
                         <div className="field-group">
                             <label for="email">Please enter an email address</label>
