@@ -1,7 +1,10 @@
 # react-firebase-form-app
+
 full stack form proof of concept using react and firebase
 
-##
+To install this project, you can run:
+
+## `npm install`
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
