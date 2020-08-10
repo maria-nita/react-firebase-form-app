@@ -196,12 +196,20 @@ class App extends Component {
                     successMessage: false
                 });
             });
-        } else {
+        } 
+        if (dataConsent === false || certificationConsent === false) {
+            this.setState({
+                gdprError: !dataConsent,
+                certifiedInCountriesError: !certificationConsent,
+                successMessage: null
+            });
+        }
+        if (dataConsent === false && certificationConsent === false) {
             this.setState({
                 gdprError: true,
                 certifiedInCountriesError: true,
                 successMessage: null
-            })
+            });
         }
     }
     render() {
